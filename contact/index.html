@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Contact </title>
+</head>
+<body>
+    <!-- Heading -->
+    <h1> Contact </h1>
+
+    <!-- Navigation Links -->
+    <nav> <a href="../index.html"> HOME </a> </nav>
+    <nav> <a href="../contact/index.html"> CONTACT </a> </nav>
+    <nav> <a href="../projects/index.html"> PROJECTS</a> </nav>
+    <nav> <a href="https://github.com/BGUO2025" target="_blank"> PROFILES </a> </nav>
+
+    <!-- Contact Form -->
+    <!-- <form action="mailto:b6guo@ucsd.edu" method="post" enctype="text/plain" target="_self"> -->
+    <form action="mailto:b6guo@ucsd.edu?subject=Hello&body=This is a test message" method="post" enctype="text/plain" target="_self">
+        <label> 
+            Email: 
+            <input type="email" name="email" required>
+        </label>
+
+        <label> 
+            Subject: 
+            <input type="text" name="subject" required>
+        </label>
+
+        <label> 
+            Body: 
+            <textarea name="body" placeholder="Type here..."> THIS IS AN EMPTY MESSAGE </textarea>
+        </label>
+
+        <button type="submit"> SEND </button>
+    </form>
+</body>
+</html>

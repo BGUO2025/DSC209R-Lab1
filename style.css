@@ -1,0 +1,16 @@
+body {
+  /* Set line height to 1.5 times the font size
+	   and use the OS’s UI font as the website font
+	 */
+  font: 100%/1.5 system-ui;
+}
+
+img {
+  max-width: 500px;
+  max-height: 700px;
+}
+
+iframe {
+  width: 700px;
+  height:700px;
+}
