@@ -1,156 +1,171 @@
 /* For ALL Pages */
 :root {
-  /* Define variables */
-  --color-highlight: bisque;
-  --color-accent: blue;
+    /* Define variables */
+    --color-highlight: bisque;
+    --color-accent: blue;
+    color-scheme: light dark;
 }
 
-body {
-  /* Text Styling */
-  font: 100%/1.5 system-ui;
-  /* Box Model Sizing */
-  margin-left: 500px;
-  margin-right: 500px;
-  max-width: 800px;
-  max-height: 800px;
+body { 
+    /* Text Styling */
+    font: 100%/1.5 system-ui;
+    /* Box Model Sizing */
+    margin-left: 500px;
+    margin-right: 500px;
+    max-width: 800px;
+    max-height: 1200px;
 }
 
 div {
-  /* Box Model Sizing */
-  margin: 25px;
+    /* Box Model Sizing */
+    margin: 25px;
 }
 
 div.flex-container {
-  /* Flex Layout */
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: flex-start;
-  /* Hightlight Color */
-  padding-bottom: 0.6em;
-  border-bottom-width: 0.1em;
-  border-bottom-style: solid;
-  border-bottom-color: var(--color-highlight);
+    /* Flex Layout */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    /* Hightlight Color */
+    padding-bottom: 0.6em;
+    border-bottom-width: 0.1em;
+    border-bottom-style: solid;
+    border-bottom-color: var(--color-highlight);
 }
 
 a {
-  /* Layout */
-  flex-grow: 1;
-  /* Text Styling */
-  text-decoration: none;
-  text-align: center;
-  color: inherit;
-  /* Box Model Sizing */
-  padding-bottom: 0.5em;
+    /* Layout */
+    flex-grow: 1;
+    /* Text Styling */
+    text-decoration: none;
+    text-align: center;
+    color: inherit;
+    /* Box Model Sizing */
+    padding-bottom: 0.5em;
 }
 
 a:hover {
-  /* Hightlight Color */
-  border-bottom-width: 0.4em;
-  border-bottom-style: solid;
-  border-bottom-color: var(--color-accent);
+    /* Hightlight Color */
+    border-bottom-width: 0.4em;
+    border-bottom-style: solid;
+    border-bottom-color: var(--color-accent);
 }
 
 #selected {
-  /* Hightlight Color */
-  border-bottom-width: 0.4em;
-  border-bottom-style: solid;
-  border-bottom-color: var(--color-highlight);
+    /* Hightlight Color */
+    border-bottom-width: 0.4em;
+    border-bottom-style: solid;
+    border-bottom-color: var(--color-highlight);
+}
+
+label.color-scheme {
+    position: absolute;
+    top: 2em;
+    right: 2em;
+}
+
+label > option {
+    text-align: center;
+    font: inherit;
 }
 /*****************************************************************************/
 
 /* For HOME Page */
 img {
-  /* Box Model Sizing */
-  max-width: 300px;
-  max-height: 500px;
+    /* Box Model Sizing */
+    max-width: 300px;
+    max-height: 500px;
 }
 /*****************************************************************************/
 
-/* For CV Page */
+/* For CURRICULUM VITAE Page */
 body.cv-body {
-  max-width: 2000px;
-  max-height: 2000px;
-  background: linear-gradient(to bottom, #9fc7fc, #a66100);
+    background: linear-gradient(to bottom, #9fc7fc, #a66100);
 }
 
 iframe {
-  /* Box Model Sizing */
-  width: 900px;
-  height: 1000px;
+    /* Box Model Sizing */
+    width: 800px;
+    height: 1000px;
 }
 /*****************************************************************************/
 
 /* For CONTACT Page */
 form {
-  /* Box Model Sizing */
-  margin: 25px;
-  /* Grid Layout */
-  display: grid;
-  grid-template-columns: 1fr 10fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-auto-flow: row;
-  column-gap: 20px;
-  row-gap: 20px;
+    /* Box Model Sizing */
+    margin: 25px;
+    /* Grid Layout */
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-auto-flow: row;
+    column-gap: 20px;
+    row-gap: 20px;
 }
 
 label, button {
-  /* Text Styling */
-  font-weight: bold;
+    /* Text Styling */
+    font-weight: bold;
 }
 
 input, textarea {
-  /* Border Styling */
-  border-radius: 0.3em;
+    /* Border Styling */
+    border-radius: 0.3em;
 }
 
 input:focus,
 textarea:focus {
-  outline-style: solid;
-  outline-width: 2px;
-  outline-color: var(--color-accent);
-  outline-offset: 2px;
+    outline-style: solid;
+    outline-width: 2px;
+    outline-color: var(--color-accent);
+    outline-offset: 2px;
 }
 
 button {
-  /* Grid Layout */
-  grid-column: 1 / span 2;
-  justify-self: center;
-  /* Text Styling */
-  color: black;
-  text-align: center;
-  background-color: var(--color-highlight);
-  /* Box Model Sizing */
-  padding: 0.6em 1.2em;
-  /* Border Styling */
-  border-radius: 0.3em;
-  cursor: pointer;
-  /* Animation */
-  transition: background-color 0.5s ease;
+    /* Grid Layout */
+    grid-column: 1 / span 2;
+    justify-self: center;
+    /* Text Styling */
+    color: black;
+    text-align: center;
+    background-color: var(--color-highlight);
+    /* Box Model Sizing */
+    padding: 0.6em 1.2em;
+    /* Border Styling */
+    border-radius: 0.3em;
+    cursor: pointer;
+    /* Animation */
+    transition: background-color 0.5s ease;
 }
 
 button:hover {
-  /* Text Styling */
-  color: white;
-  background-color: var(--color-accent)
+    /* Text Styling */
+    color: white;
+    background-color: var(--color-accent)
 }
 /*****************************************************************************/
 
 /* For PROJECTS Page */
 div.projects {
-  /* Grid Layout */
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-  grid-auto-rows: auto;
-  column-gap: 20px;
-  row-gap: 20px;
+    /* Grid Layout */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    grid-auto-rows: auto;
+    column-gap: 20px;
+    row-gap: 20px;
 }
 
 div.projects > article {
-  /* Grid Layout */
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 3;
+    /* Grid Layout */
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
 }
 /*****************************************************************************/
+
+/* Dark Mode Adjustment */
+body.cv-body.dark-mode {
+    background: linear-gradient(to bottom, #001933, #663300);
+}

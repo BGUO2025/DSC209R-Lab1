@@ -5,25 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Contact </title>
     <link rel="stylesheet" href="../style.css">
+    <script type="module" src="../global.js" defer></script>
+
 </head>
 <body>
-    <!-- Navigation Links -->
-    <div class="flex-container">
-        <nav> <a href="../index.html"> HOME </a> </nav>
-        <nav> <a id="selected" href="../contact/index.html"> CONTACT </a> </nav>
-        <nav> <a href="../CV/index.html"> CV </a> </nav>
-        <nav> <a href="../projects/index.html"> PROJECTS</a> </nav>
-        <nav> <a href="https://github.com/BGUO2025" target="_blank"> PROFILES </a> </nav>
-    </div>
-
     <!-- Heading -->
     <div> <h1> Contact Me </h1> </div>
 
     <!-- Contact Form -->
-    <form action="mailto:b6guo@ucsd.edu?subject=Hello&body=This is a test message" method="post" enctype="text/plain" target="_self">
-        <label> Email: </label>
-        <input type="email" name="email" value="steven20001108@gmail.com">
-
+    <!-- <form action="mailto:b6guo@ucsd.edu?subject=Hello&body=This is a test message" method="post" enctype="text/plain" target="_self"> -->
+    <form method="get" target="_self">
         <label> Subject: </label>
         <input type="text" name="subject" value="Hello">
 
