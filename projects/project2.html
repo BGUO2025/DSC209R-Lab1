@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2 Report</title>
+    <link rel="stylesheet" href="../style.css">
+    <script type="module" src="../global.js"></script>
+    <script type="module" src="../projects/project.js"></script>
+    <style>
+      :root {
+        --color-neutral-95: hsl(220 10% 95%);
+        --color-neutral-90: hsl(220 10% 90%);
+        --color-neutral-80: hsl(220 10% 80%);
+        --color-neutral-70: hsl(220 10% 70%);
+        --color-neutral-60: hsl(220 10% 60%);
+        --color-neutral-50: hsl(220 10% 50%);
+        --color-neutral-40: hsl(220 10% 40%);
+        --color-neutral-30: hsl(220 10% 30%);
+        --color-neutral-20: hsl(220 10% 20%);
+        --color-neutral-10: hsl(220 10% 10%);
+      }
+
+      html, body {
+        width: 100%;
+        min-width: 1200px;
+      }
+
+      html {
+        font: 100%/1.5 system-ui;
+        counter-reset: figure;
+        background: var(--color-neutral-95);
+        /* max-width: min(75vw, 80em); */
+        margin: 0 auto;
+        max-width: 2000px;
+        max-height: 2000px;
+      }
+
+      body {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Headings */
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        line-height: 1.1;
+        font-weight: 600;
+        text-wrap: balance;
+      }
+
+      h1,
+      h2 {
+        border-bottom: 1px solid var(--color-neutral-80);
+        padding-bottom: 0.2em;
+      }
+
+      h1 {
+        margin-block: 1em 0.5rem;
+        font-size: clamp(2.5em, 150% + 2vh + 2vw, 10vmin);
+        font-weight: 800;
+
+        small {
+          display: block;
+          width: fit-content;
+          padding: 0.2em 0.5em;
+          margin-inline: auto;
+          color: white;
+          background: var(--color-neutral-40);
+          font-size: 40%;
+          text-transform: uppercase;
+          white-space: nowrap;
+        }
+      }
+
+      h2 {
+        font-size: 180%;
+        color: var(--color-neutral-30);
+      }
+
+      h3 {
+        font-size: 130%;
+      }
+
+      /* Lists */
+
+      ul,
+      ol {
+        padding-inline-start: 2em;
+      }
+
+      li {
+        &::marker {
+          color: var(--color-neutral-40);
+        }
+
+        + li {
+          margin-top: 0.2em;
+        }
+      }
+
+      /* Sectioning elements */
+
+      header {
+        padding-block: 1em;
+        text-align: center;
+      }
+
+      main {
+        background: white;
+        color: var(--color-neutral-20);
+        border-radius: 1rem;
+        padding: 0.1rem 2rem;
+      }
+
+      /* Figures */
+
+      figure {
+        margin: 1em 0;
+        padding: 0.5rem;
+        margin-inline: -0.5em;
+        border: 1px solid var(--color-neutral-80);
+        box-shadow: 0 0.1em 0.2em var(--color-neutral-95);
+        text-align: center;
+        background: white;
+
+        > img {
+          display: block;
+          max-width: 100%;
+          height: auto;
+          margin: 0 auto;
+        }
+
+        > figcaption {
+          font: 500 75% var(--font-sans);
+          background: var(--color-neutral-95);
+          padding: 0.5rem;
+          margin: -0.5rem;
+          margin-top: 0.5rem;
+          counter-increment: figure;
+          text-align: left;
+
+          &::before {
+            content: 'Figure ' counter(figure) ': ';
+            font-weight: bold;
+            color: var(--color-neutral-40);
+          }
+
+          a:not(:hover, :focus, :active) {
+            color: inherit;
+            text-decoration: underline;
+            text-decoration-color: color-mix(
+              in lab,
+              currentColor,
+              transparent 70%
+            );
+          }
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Title Content -->
+    <header>
+      <h1>
+        <small>Project 2</small>
+        Persuasive or Deceptive Visualization?
+      </h1>
+
+      <p><strong>Baixi Guo</strong> — <em>b6guo@ucsd.edu</em></p>
+    </header>
+
+    <!-- Actual Content -->
+    <main>
+      <!-- Stated Proposition -->
+      <h2>Proposition: The incidence of NYPD officers' misconduct has not increased over time.</h2>
+
+      <!-- Visualization Supporting Proposition -->
+      <section>
+        <!-- Stated Proposition -->
+        <h3 style="color: red">Visualization 1 — Supporting the Proposition</h3>
+
+        <!-- Visualization -->
+        <figure>
+          <img src="../static/v2.png" alt="Visualization 1 Supports the Proposition" />
+        </figure>
+
+        <!-- Design -->
+        <p><strong>Design Decisions and Rationale:</strong></p>
+        <ul>
+          <li>
+            <strong> 1. Using a line plot to describe a trend over time </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                I want to demonstrate a visualization of how the percentage of allegations with “substantiated” dispositions and with “unsubstantiated & exonerated” dispositions changes over time. For my data model, my X-axis represents years with allegations received (Quantitative Interval / Temporal), and my Y-axis represents the percentages of allegations with different types of dispositions (Quantitative Ratio). I used color to encode types of disposition (Categorical Nominal) and a line plot as the visual mark choice because it effectively showcases trends over time and helps the audience identify key takeaways.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                2 → I follow guidance from the design space, effectiveness, and expressiveness, ensuring not to misrepresent the information using the wrong visual mark, as suggested in the design space lecture.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Using a line plot to represent temporal data on the X-axis and quantitative data on the Y-axis is an effective choice in the combinatorial design space.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                It works well because the line plot clearly conveys the contrast between substantiated and non-substantiated allegations over time, allowing viewers to see the stability or decline of substantiated cases at a glance.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                I tried using a bar chart and a pie chart, but bar charts produce redundant gains and pie charts only show aggregated results, not trends over time.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                When using a bar chart to showcase how the number of allegations changes over time, you will end up seeing a lot of bars with the same length, 
+                which contain a lot more redundant gains than filtering interference, 
+                indicating that the audience might need to spend more time to observe the same pattern from a line plot.              
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 2. Trimming off the year data from 2018 and beyond </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                The data for years after 2018 show an increasing percentage of allegations with “substantiated” disposition. To support the proposition that substantiated misconduct has not increased, I filtered these years out.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                -2 → Selecting a subset of data is intentionally deceptive to match the argument being supported.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Excluding the years after 2018 creates a false sense of stability or decline in confirmed misconduct, persuading the audience that the proportion of substantiated cases remains consistently low.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                It works well by avoiding the sharp upward slope in later years, making the argument more compelling at a glance.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                Showing the full data with no filtering.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                 I think the filtered version can strongly persuade the audience 
+                 because it realistically shows that the percentage of allegations with “substantiated” disposition can sometimes increase, 
+                 but overall, it decreases or remains in low percentages, whereas adding the remaining data part will show that the percentage steadily increases, 
+                 which is no help in convincing audience to support the argument.
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 3. Using shading colors under lines </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                The shading area showcases the area magnitude visual channel. Different colors help separate allegations by disposition type.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                2 → Using shading effectively signifies trends while remaining earnest.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                he use of green to represent “Non-Substantiated & Exonerated” implies that most cases are resolved favorably for officers, 
+                suggesting reassurance or stability. 
+                Meanwhile, the smaller red area representing “Substantiated” dispositions visually minimizes the perceived scale of confirmed misconduct.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                Shading enhances visual comparison, but overlapping areas could be misinterpreted as a stacked line chart.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                Using different shading colors or none at all.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                I settle down with the shading color combination of green and red 
+                because the complementary color set, along with lighter color/luminance with green and darker color/luminance, 
+                is not only excellent in creating color contrast, but they are also color-blind friendly. 
+                Red and green could still be perceived as different colors by different types of color-blind individuals, 
+                even by individuals with achromatopsia, who can only see the world with a shade of gray. 
+                They can identify that there are two types of disposition 
+                because they can perceive the lower luminance of gray (light green) and the higher luminance of gray (dark red).
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 4. Using Transformation Description and Cited Sources </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                To show transparency, I included data transformation steps and cited sources, explaining any pre-filtering and calculations.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                1.5 → Strengthens credibility and professionalism.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Including source and transformation notes builds trust and supports the argument objectively.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                Providing the source and transformation explanation makes the visualization appear objective and transparent
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                Not including the transformation note.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                Including the transformation and source details demonstrates the validity of the data supporting the argument.
+              </p></li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- <ul>
+          <li>
+            <strong> 1. Using a line plot to describe a trend over time </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                I want to demonstrate a visualization of how the percentage of allegations with “substantiated” dispositions and with “unsubstantiated & exonerated” dispositions changes over time. For my data model, my X-axis represents Years with allegations received (Quantitative Interval / Temporal), and my Y-axis represents the percentages of allegations with different types of dispositions (Quantitative Ratio). I used color to encode types of disposition (Categorical Nominal) and a line plot as the visual mark choice because it effectively showcases trends over time and helps the audience identify key takeaways.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                2 → I follow guidance from the design space, effectiveness, and expressiveness, ensuring not to misrepresent the information using the wrong visual mark, as suggested in the design space lecture.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Using a line plot to represent temporal data on the X-axis and quantitative data on the Y-axis is an effective choice in the combinatorial design space.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                It works well because the line plot clearly conveys the contrast between substantiated and non-substantiated allegations over time, allowing viewers to see the stability or decline of substantiated cases at a glance.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                I tried using a bar chart and pie chart, but bar charts produce redundant gains and pie charts only show aggregated results, not trends over time.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                Line plots effectively convey trends over time and allow the audience to quickly identify contrasts between categories, which bar charts and pie charts cannot achieve.
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 2. Trimming off the year data from 2018 and beyond </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                The data for years after 2018 show an increasing percentage of allegations with “substantiated” disposition. To support the proposition that substantiated misconduct has not increased, I filtered these years out.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                -2 → Selecting a subset of data is intentionally deceptive to match the argument being supported.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Excluding the years after 2018 creates a false sense of stability or decline in confirmed misconduct, persuading the audience that the proportion of substantiated cases remains consistently low.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                It works well by avoiding the sharp upward slope in later years, making the argument more compelling at a glance.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                Showing the full data with no filtering.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                The filtered version strongly persuades the audience because it aligns with the supportive argument, whereas including all data would weaken it.
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 3. Using shading colors under lines </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                The shading area showcases the area magnitude visual channel. Different colors help separate allegations by disposition type.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                2 → Using shading effectively signifies trends while remaining earnest.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Green represents “Non-Substantiated & Exonerated” suggesting stability, while red represents “Substantiated” minimizing perceived confirmed misconduct.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                Shading enhances visual comparison, but overlapping areas could be misinterpreted as a stacked line chart.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                Using different shading colors or none at all.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                Chose green/red complementary colors, which are color-blind friendly and create clear contrast.
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 4. Using Transformation Description and Cited Sources </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                To show transparency, I included data transformation steps and cited sources, explaining any pre-filtering and calculations.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                1.5 → Strengthens credibility and professionalism.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Including source and transformation notes builds trust and supports the argument objectively.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                Providing the source and transformation explanation makes the visualization appear objective and transparent.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                Not including the transformation note.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design:</em></u>
+                Including the transformation and source details demonstrates validity of the data supporting the argument.
+              </p></li>
+            </ul>
+          </li>
+        </ul> -->
+
+        <!-- Data Transfomation -->
+        <p><strong>Data Transformation:</strong></p>
+        <ul>
+          <li>
+            <u>Feature Engineering:</u>
+            Simplified the “board_disposition” attribute values by grouping multiple detailed “Substantiated” categories into a single “Substantiated” label. 
+            All other labels were grouped into a single “Non-Substantiated_Exonerated” category. 
+            I named it “disposition_simplified”.
+          </li>
+          <li>
+            <u>Filtering:</u>
+            Filter the “year” attribute by selecting only the years before 2018, 
+            as the allegations with the “Substantiated” disposition outcome started to increase starting in 2018.
+          </li>
+          <li>
+            <u>Group-by Aggregation:</u>
+            Grouped the dataset by both the “year_received” and “disposition_simplified” attributes to 
+            count the number of allegations for each year and category. 
+            I want to visualize the trend line for different types of disposition outcomes over the year. 
+            These data are sufficient to create the visualization that I needed.
+          </li>
+          <li>
+            <u>Percentage Calculation:</u>
+            I computed the relative percentage of each label of the “disposition_simplified” attribute out of all counts of instances. 
+            This allows me to showcase the percentage of “Substantiated” and “Non-Substantiated_Exonerated” labels. 
+          </li>
+        </ul>
+      </section>
+
+      <!-- Visualization Opposing Proposition -->
+      <section>
+        <!-- Title -->
+        <h3  style="color: red">Visualization 2 — Opposing the Proposition</h3>
+
+        <!-- Visualization -->
+        <figure>
+          <img src="../static/v1.png" alt="Visualization 2 Opposes the Proposition" />
+        </figure>
+
+        <!-- Design -->
+        <p><strong>Design Decisions and Rationale:</strong></p>
+        <ul>
+          <li>
+            <strong> 1. Using a line plot to describe a trend over time </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                 I want to demonstrate a visualization of how the number of allegations changes over time. 
+                 For my data model, my X-axis represents Years with allegations received, 
+                 which is Quantitative Interval or temporal data. 
+                 My Y-axis represents the number of allegations, 
+                 which is Quantitative Interval data. 
+                 I used a line plot as the visual mark choice because a line plot is an expressive choice to showcase trends over time correctly, 
+                 and an effective choice to help the audience identify important trends and takeaways at first glance.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                2 → I follow guidance from the design space, effectiveness, and expressiveness, 
+                ensuring not to misrepresent the information using the wrong visual mark and choosing a line plot 
+                as it's suggested in the design space lecture.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                Using a line plot to represent temporal data in the X-axis 
+                and Quantitative data in the Y-axis is an effective choice in the combinatorial design space.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                I think it works well because it will help the audience understand the pattern of allegation over time easily.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                I tried to use a bar chart as a visual mark.
+              </p></li>
+              </p></li>
+                <u><em>Why Settle Down With This Design</em></u>
+                When using a bar chart to showcase how the number of allegations changes over time, 
+                you will end up seeing a lot of bars with the same length, 
+                which contain a lot more redundant gains than filtering interference, 
+                indicating that the audience might need to spend more time observing the same pattern from a line plot.
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 2. Truncating the x-axis </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                 The data from the period 1985-2000 and from the period 2018-2020 were filtered out, 
+                 suggesting a decreasing trend. 
+                 These data are an obstacle for me to showcase only an increasing trend for allegation counts over the years to the audience, 
+                 so I need to get rid of them.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                 -1 → If you are not familiar with the dataset, 
+                 it's hard to see the minimum and maximum years you can find in the dataset. 
+                 It required close investigation to figure it out. 
+                 This is deceptive. 
+                 I also follow the effectiveness guideline to use an appropriate mark (line chart) to show how the allegation counts change over the years.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                The line chart is good to showcase trends and changes over time, 
+                and unfiltered data shows only the increasing trend, despite the slope varying; 
+                it aligns with my intention to promote an increase allegation pattern over the years.
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                I think it works well because it shows the increasing trend clearly to the audience.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                I have considered truncating only before 2000 or after 2018
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design</em></u>
+                The period before 2000 shows a rather oscillating decreasing trend, 
+                and after 2018, the line plot plummets to the bottom. 
+                I settled on the decision to only keep the period between 2000-2018.
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 3. Using a gradient color bar ranging from light to dark colors </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                The gradient color signals an increasing number of allegations.
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                1 → I am using the color luminance as a magnitude channel to signify the difference in the amount of allegation counts, 
+                as a way to increase the effectiveness of the graph with earnest intention, 
+                but at the same time, 
+                the effectiveness of persuading the audience to believe the opposing argument also magnifies the effect of deception.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                I want to use color changes from yellow to red to 
+                stimulate the sense of increasing severity of the allegation addressed by the civilians to the NYPD officers. 
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                 It didn't work well because color luminance is always less effective than position on a common scale. 
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                I consider not adding any color.
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design</em></u>
+                Although color luminance is not the most effective channel to use, 
+                I combine it with the line plot to draw more attention from the audience. 
+                Therefore, I settled on adapting the gradient color.
+              </p></li>
+            </ul>
+          </li>
+
+          <li>
+            <strong> 4. Dark grey shading area under the line and Textual Information </strong> 
+            <ul>
+              <li><p>
+                <u><em>Rationale:</em></u>
+                The shading area shows an increasing growth in area over time, 
+                combined with a textual annotation emphasizing a 600% increase in the number of allegations since the year 2000, 
+                guiding the audience to interpret the plot aligned with my intention
+              </p></li>
+              <li><p>
+                <u><em>Score:</em></u>
+                1 → It's an earnest design where I was using a shading area as the area magnitude visual channel, 
+                whereas using an enlarged font size with bright red text emphasizing “600%” as a pre-attentive processing technique 
+                to use a different color/font size to stand out from multiple lines of text.
+              </p></li>
+              <li><p>
+                <u><em>How Is It Persuasive:</em></u>
+                The shaded region gives visual “weight” to the later years, 
+                making the increase look more substantial than it may be numerically. 
+                The textual annotation further directs the viewer's attention to a single, 
+                emotionally charged takeaway (“600% increase”)
+              </p></li>
+              <li><p>
+                <u><em>What Worked/Didn't Work Well:</em></u>
+                 It worked well in quickly capturing audience attention and clearly conveying the intended takeaway. 
+                 However, it could be confusing to interpret the counts are cumulative over the year because of the shading area.
+              </p></li>
+              <li><p>
+                <u><em>Other Alternatives Considered:</em></u>
+                I have considered not adding the shading area and textual annotation
+              </p></li>
+              <li><p>
+                <u><em>Why Settle Down With This Design</em></u>
+                The alternative design does not capture the audience quickly on how large the area is growing over time,
+                and by having textual information clearly demonstrate the takeaway message to the audience
+              </p></li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Data Transfomation -->
+        <p><strong>Data Transformation:</strong></p>
+        <ul>
+          <li>
+            <u>Group-by Aggregation:</u> 
+            Grouped the dataset by the “year_received” attribute and computed the total count of allegations for each year. 
+            This is an essential step to transform the data so that I can display the allegation counts over the year.
+          </li>
+          <li>
+            <u>Filtering:</u>
+            Filter the “year” attribute by selecting only the range between 2000 and 2018, 
+            because any years outside of this range show a pattern of decreasing allegations, 
+            which is not helpful to persuade the audience that the allegations are increasing over time.
+            Filter the “year” attribute by selecting only the range between 2000 and 2018, 
+            because any years outside of this range show a pattern of decreasing allegations, 
+            which is not helpful to persuade the audience that the allegations are increasing over time.
+          </li>
+        </ul>
+      </section>
+
+      <!-- Ethical Reflection -->
+      <section>
+        <h2>Final Reflection</h2>
+        <p>
+          What I found straightforward is to choose the types of mark and the visual channel design to improve the effectiveness of the visualization, 
+          because I have experience from building project 1. 
+          However, it's hard to find two different perspectives from the same data to create visualizations, 
+          with one supporting my stated proposition and another opposing it. 
+          For example, when I was able to use allegation counts over the year to demonstrate the increasing trend of allegations received by the NYPD officers, 
+          it took a long time to come up with another way to see the dataset, 
+          and I found some evidence that ended up with an opposite conclusion. 
+          In addition, by the time you figure it a way to deceive the audience, 
+          it's very easy to use deceptive techniques that are easily spotted by the audience.
+          For example, I originally capitalized some stimulating words, such as “Allegation”, “Increase”, and “Against” in the title, 
+          and colored them with bright red in the visualization that opposes the stated proposition, 
+          as I believed that bright color attracts attention and capitalized words can stimulate negative emotions of the audience toward NYPD officers before they even looked at the plot. 
+          However, this is too obvious to spot as an instigating sign to bring dislike on NYPD officers. 
+        </p>
+
+        <p> 
+          What I found surprising about this project is that earnest design sometimes does not come out “earnest” in a deceptive visualization. 
+          If you intend to deceive, mislead, and spread misinformation, 
+          the techniques that improve the effectiveness of a visualization, 
+          which were meant to be earnest, turn out to be more effective in conveying your misleading and deceptive information to the readers. 
+          For instance, in the visualization that opposes the stated proposition, 
+          a line plot is used as a visual mark, with growing shading area over time, 
+          and even a gradient color is meant to enhance the effectiveness of the graph, 
+          but that's in turn, assists the deceptive element to convey the misleading message. Therefore, I don't know the clear boundary between earnest and deceptive design. 
+          If your intention is earnest and meant to provide transparent information, most likely your design is earnest. 
+          I said most likely because there is a small chance that, even if you use the transparent full dataset for your visualization, 
+          due to some specific computation you need to perform, your results will tell a very different conclusion compared to a visualization with some other specific computation or aggregation, 
+          even though that was unintentional.
+        </p>
+
+        <p> I would define ethical analysis and visualization as a practice that respects data privacy 
+          (by complying with data regulation/policy), 
+          considers the source of bias from the dataset, 
+          and comes up with mitigation strategies before performing analysis, 
+          and finally creates a visualization with a short explanation of data transformation and cited source at the bottom, 
+          if possible, provides a detailed rationale on each design decision and data transformation, 
+          which help professional audience to replicate the process if they want to. 
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

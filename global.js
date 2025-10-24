@@ -1,7 +1,3 @@
-// Testing of JS file connection
-console.log('IT’S ALIVE!');
-
-// document.addEventListener('DOMContentLoaded', function () {
 // Create Navigation Bar dynamically
 // Define the pages for the navigation bar
 let pages = [
@@ -9,6 +5,7 @@ let pages = [
     { url: 'contact/index.html',          title: 'CONTACT' },
     { url: 'CV/index.html',               title: 'CURRICULUM VITAE' },
     { url: 'projects/index.html',         title: 'PROJECTS' },
+    { url: 'projects/project2.html',      title: 'PROJECT 2: DECEPTIVE VISUALIZATION'},
     { url: 'https://github.com/BGUO2025', title: 'PROFILE', openInNewTab: true },
 ];
 
@@ -117,3 +114,114 @@ form?.addEventListener('submit', (event) => {
     // Conifgure where to send email
     window.location.href = mailtolink;
 })
+
+// Fetch project data
+export async function fetchJSON(url) {
+  try {
+    // Fetch the JSON file from the given URL
+    const response = await fetch(url);
+
+    // Check if reponse is valid
+    if (!response.ok) {
+        throw new Error(`Failed to fetch projects: ${response.statusText}`);
+    }
+
+    // Return the data
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error('Error fetching or parsing JSON data:', error);
+  }
+}
+
+// Fetch Github data
+export async function fetchGithubData(username) {
+  return fetchJSON(`https://api.github.com/users/${username}`);
+}
+
+// Create project gallery dynamically
+export function renderProjects(projects, containerElement) {
+    // Make sure "projects" to be a valid array
+    if(!Array.isArray(projects)) {
+        console.log('renderProjects error: "project" must be an array.');
+        return;
+    }
+
+    // Make sure "containerElement" to be a valid HTMLElement
+    if (!(containerElement instanceof HTMLElement)) {
+        console.log('renderProject error: "containerElement" must be a DOM element.');
+        return;
+    }
+
+    // Before dynamical creation, clear previous content
+    containerElement.innerHTML = '';
+
+            // Modify <h1> element
+    const projectHeaderContainerElement = document.querySelector('.project-header')
+    if (!(projectHeaderContainerElement instanceof HTMLElement)) {
+        console.log('renderProject error: "h1" must be a DOM element.');
+        return;
+    }
+
+    projectHeaderContainerElement.innerHTML = (projects.length == 0 || projects.length == 1)? 
+        `<h1> ${projects.length} Project </h1>` : 
+        `<h1> ${projects.length} Projects </h1>`;
+
+    // Dynamically create project gallery
+    projects.forEach((project) => {
+        // Make sure "project" is not empty AND "project" to be a valid object
+        if (!project || typeof project != 'object') return;
+
+        // Extract data while handling default values
+        const title = project.title || 'Untitled Project';
+        const image = project.image || 'https://vis-society.github.io/labs/2/images/empty.svg';
+        const description = project.description || 'No description available.';
+
+        // Create <article> element
+        const article = document.createElement('article');
+        article.innerHTML = `
+            <h2> ${title} </h2}>
+            <img src="${image}" alt=${title}>
+            <p> ${description} </p>
+        `;
+
+        // Append <article> as child of container element
+        containerElement.appendChild(article);
+    })
+    if (projects.length == 0) {
+        containerElement.innerHTML = '<h2> Projects Are Coming Soon! </h2>'
+    }
+}
+
+// Create project gallery dynamically
+export function renderGithubProfile(githubData, containerElement) {
+    // Make sure "containerElement" to be a valid HTMLElement
+    if (!(containerElement instanceof HTMLElement)) {
+        console.log('renderGithubProfile error: "containerElement" must be a DOM element.');
+        return;
+    }
+
+    // Before dynamical creation, clear previous content
+    containerElement.innerHTML = '';
+
+    // Create Github Stats dynamically
+    containerElement.innerHTML = `
+        <!-- Github Profile title -->
+        <h1> Github Profile </h1>
+
+        <!-- Github data attr -->
+        <dl id="profile-container">
+          <dt>Public Repos:</dt><dd>${githubData.public_repos}</dd>
+          <dt>Public Gists:</dt><dd>${githubData.public_gists}</dd>
+          <dt>Followers:</dt><dd>${githubData.followers}</dd>
+          <dt>Following:</dt><dd>${githubData.following}</dd>
+        </dl>
+
+        <!-- Preserve spaces -->
+        <pre>
+
+        
+        </pre>
+    `;
+}

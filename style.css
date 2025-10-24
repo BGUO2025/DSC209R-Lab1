@@ -78,6 +78,15 @@ img {
     max-width: 300px;
     max-height: 500px;
 }
+
+#profile-container {
+    /* Flex Layout */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+}
 /*****************************************************************************/
 
 /* For CURRICULUM VITAE Page */
