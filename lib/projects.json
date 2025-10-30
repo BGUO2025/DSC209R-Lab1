@@ -1,13 +1,15 @@
 [
     {
-		"title": "Lorem ipsum dolor sit.",
+		"title": "Project 3: Mobile Legend Dynamic Visualization Draft",
 		"image": "https://vis-society.github.io/labs/2/images/empty.svg",
-		"description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit."
+		"description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam dolor quos, quod assumenda explicabo odio, nobis ipsa laudantium quas eum veritatis ullam sint porro minima modi molestias doloribus cumque odit.",
+		"link": "../projects/project3_interactive.html"
 	},
 	{
-		"title": "Architecto minima sed omnis?",
+		"title": "Project 2: Deceptive Static Visualization",
 		"image": "https://vis-society.github.io/labs/2/images/empty.svg",
-		"description": "Est, reiciendis aspernatur debitis maxime et itaque animi sit quod quo, tempore incidunt tempora dignissimos exercitationem enim numquam quam quaerat optio laborum ut unde hic delectus laboriosam? Quasi, cupiditate corporis."
+		"description": "Est, reiciendis aspernatur debitis maxime et itaque animi sit quod quo, tempore incidunt tempora dignissimos exercitationem enim numquam quam quaerat optio laborum ut unde hic delectus laboriosam? Quasi, cupiditate corporis.",
+		"link": "../projects/project2_deceptive.html"
 	},
 	{
 		"title": "Asperiores rem repellendus doloremque.",

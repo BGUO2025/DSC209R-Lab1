@@ -5,7 +5,6 @@ let pages = [
     { url: 'contact/index.html',          title: 'CONTACT' },
     { url: 'CV/index.html',               title: 'CURRICULUM VITAE' },
     { url: 'projects/index.html',         title: 'PROJECTS' },
-    { url: 'projects/project2.html',      title: 'PROJECT 2: DECEPTIVE VISUALIZATION'},
     { url: 'https://github.com/BGUO2025', title: 'PROFILE', openInNewTab: true },
 ];
 
@@ -177,14 +176,28 @@ export function renderProjects(projects, containerElement) {
         const title = project.title || 'Untitled Project';
         const image = project.image || 'https://vis-society.github.io/labs/2/images/empty.svg';
         const description = project.description || 'No description available.';
+        const link = project.link || null;
+
+        if(link !== null){
+            console.log(`Creating project: ${title} with link: ${link}`);
+        }
 
         // Create <article> element
         const article = document.createElement('article');
+        if (link !== null) {
+            article.innerHTML = `
+            <a href=${link} target='_blank'> <h2 class='highlight-clicked'> ${title} </h2> </a>
+            <img src="${image}" alt=${title}>
+            <p> ${description} </p>
+        `;
+        }
+        else {
         article.innerHTML = `
             <h2> ${title} </h2}>
             <img src="${image}" alt=${title}>
             <p> ${description} </p>
         `;
+        }
 
         // Append <article> as child of container element
         containerElement.appendChild(article);

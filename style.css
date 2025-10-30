@@ -12,7 +12,7 @@ body {
     /* Box Model Sizing */
     margin-left: 500px;
     margin-right: 500px;
-    max-width: 800px;
+    max-width: 1200px;
     max-height: 1200px;
 }
 
@@ -166,11 +166,9 @@ div.projects {
     row-gap: 20px;
 }
 
-div.projects > article {
-    /* Grid Layout */
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-row: span 3;
+.highlight-clicked:hover {
+    color: var(--color-accent);
+    font-size: 1.6em;
 }
 /*****************************************************************************/
 
