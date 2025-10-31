@@ -170,6 +170,60 @@ div.projects {
     color: var(--color-accent);
     font-size: 1.6em;
 }
+
+#year-text {
+    font-family: Baskerville;
+}
+
+#projects-pie-plot {
+  max-width: 20em;
+  margin-block: 2em;
+
+  overflow: visible;
+}
+
+/* overall layout */
+.legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
+  gap: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+/* each legend item */
+.legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* color swatch */
+.legend-item .swatch {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  border-radius: 4px;
+}
+
+svg:has(path:hover) path:not(:hover) {
+  opacity: 0.5;
+}
+
+path {
+  transition: 300ms;
+  cursor: pointer;
+}
+
+.selected {
+  --color: oklch(60% 45% 0) !important;
+}
+
+.selected:is(path) {
+  fill: var(--color);
+}
 /*****************************************************************************/
 
 /* Dark Mode Adjustment */

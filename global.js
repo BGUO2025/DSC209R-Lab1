@@ -140,7 +140,7 @@ export async function fetchGithubData(username) {
 }
 
 // Create project gallery dynamically
-export function renderProjects(projects, containerElement) {
+export function renderProjects(projects, containerElement, path_dir) {
     // Make sure "projects" to be a valid array
     if(!Array.isArray(projects)) {
         console.log('renderProjects error: "project" must be an array.');
@@ -156,7 +156,7 @@ export function renderProjects(projects, containerElement) {
     // Before dynamical creation, clear previous content
     containerElement.innerHTML = '';
 
-            // Modify <h1> element
+    // Modify <h1> element
     const projectHeaderContainerElement = document.querySelector('.project-header')
     if (!(projectHeaderContainerElement instanceof HTMLElement)) {
         console.log('renderProject error: "h1" must be a DOM element.');
@@ -176,28 +176,27 @@ export function renderProjects(projects, containerElement) {
         const title = project.title || 'Untitled Project';
         const image = project.image || 'https://vis-society.github.io/labs/2/images/empty.svg';
         const description = project.description || 'No description available.';
+        const year = project.year || 'Unknown Year';
         const link = project.link || null;
-
-        if(link !== null){
-            console.log(`Creating project: ${title} with link: ${link}`);
-        }
 
         // Create <article> element
         const article = document.createElement('article');
-        if (link !== null) {
-            article.innerHTML = `
-            <a href=${link} target='_blank'> <h2 class='highlight-clicked'> ${title} </h2> </a>
-            <img src="${image}" alt=${title}>
-            <p> ${description} </p>
-        `;
-        }
-        else {
+
+        // If there's a link, prepend the path and wrap the title
+        const hasLink = link !== null;
+        const fullLink = hasLink ? path_dir + link : null;
+
+        const titleHTML = hasLink
+            ? `<a href="${fullLink}" target="_blank"><h2 class="highlight-clicked">${title}</h2></a>`
+            : `<h2>${title}</h2>`;
+
+        // Set inner HTML once
         article.innerHTML = `
-            <h2> ${title} </h2}>
-            <img src="${image}" alt=${title}>
-            <p> ${description} </p>
+            ${titleHTML}
+            <img src="${image}" alt="${title}">
+            <p>${description}</p>
+            <p id='year-text'>${year}</p>
         `;
-        }
 
         // Append <article> as child of container element
         containerElement.appendChild(article);
