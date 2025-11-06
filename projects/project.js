@@ -126,95 +126,139 @@ searchInput?.addEventListener('input', (event) => {
 });
 // ----------------------------------------------------------------------------------------------------
 
-// ---------- CONFIG ----------
-const axes = ["Hp", "Hp_Regen", "Mana", "Mana_Regen", "Phy_Damage", "Mag_Defence", "Mov_Speed"];
+// ---------- CONFIGURATION ----------
+const axes = ["Hp", "Hp_Regen", "Mana", "Mana_Regen", "Phy_Damage", "Phy_Defence", "Mag_Defence", "Mov_Speed"];
 const levels = 5;
-const maxValue = 1;
-const width = 640, height = 480, margin = 60;
+const width = 1000, height = 800, margin = 80;
 const radius = Math.min(width, height) / 2 - margin;
 const colors = d3.schemeTableau10;
+const angleSlice = (2 * Math.PI) / axes.length;
+const r = d3.scaleLinear().domain([0, 1]).range([0, radius]);
 
-// ---------- SETUP ----------
+// ---------- CREATE SVG & BASE GROUP ----------
+// SVG Container
 const svg = d3.select("svg#radar")
+  .attr("width", width)
+  .attr("height", height/2)
   .attr("viewBox", [0, 0, width, height])
   .attr("preserveAspectRatio", "xMidYMid meet");
-
+// Plot Container
 const g = svg.append("g")
-  .attr("transform", `translate(${width / 2},${height / 2})`);
+  .attr("class", "plot")
+  .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-const angleSlice = (2 * Math.PI) / axes.length;
-const r = d3.scaleLinear().domain([0, maxValue]).range([0, radius]);
-
-const radialLine = d3.lineRadial()
-  .curve(d3.curveLinearClosed)
-  .radius((d) => r(d.value))
-  .angle((d, i) => i * angleSlice);
-
-// ---------- DRAW GRID ----------
-function drawGrid() {
+// ---------- FUNCTIONS ----------
+function drawRadarCoordinate() {
+  // PART 1: ANGLE AXES LINES
   for (let lvl = 1; lvl <= levels; lvl++) {
-    const t = (lvl / levels) * maxValue;
-    const ring = d3.range(axes.length).map(i => [
-      Math.cos(i * angleSlice - Math.PI / 2) * r(t),
-      Math.sin(i * angleSlice - Math.PI / 2) * r(t)
-    ]);
-    g.append("path")
+    // Render the radial grid circles
+      // Define radius for each level
+    g.append("circle")
       .attr("class", "grid")
-      .attr("d", d3.line().curve(d3.curveLinearClosed)(ring));
+      .attr("r", (lvl / levels) * radius)
   }
 
-  // radial tick labels
+  // PART 2: AXES CONTAINER
+  // Render the axes groups
+    // Using raw data: axes names
+    // Join with group elements
+    // Rotate each group area by angle - 90deg
+  const axis = g.selectAll(".axis")
+    .data(axes)
+    .join("g")
+    .attr("class", "axis");
+
+  // PART 3: ANGLE AXES VALUES
+  // Render the radial axis labels
+    // X position: r(maxValue) + 12 (slightly outside the axis line)
+    // Y position: 4 (slightly below the axis line)
+    // Rotate each label back by -angle + 90deg to cancel out the group rotation
+    // Text: axis name
+  axis.append("text")
+    .attr("class", "label")
+    .attr("x", (_, i) => Math.cos(angleSlice * i - Math.PI / 2) * (radius + 70))
+    .attr("y", (_, i) => Math.sin(angleSlice * i - Math.PI / 2) * (radius + 45))
+    .attr("text-anchor", "middle")
+    .style("font-size", "20px")
+    .style("font-weight", "500")
+    .text(d => d);
+
+  // PART 4: RADIAL AXES LINES
+  // Render the radial axis lines
+    // Each line starts at (0,0) from the group’s origin
+    // Each line ends at (radius, 0) to the outer radius 
+    // Coordinate is relative to the rotated group
+  axis.append("line")
+    .attr("x1", 0)
+    .attr("y1", 0)
+    .attr("x2", (_, i) => Math.cos(angleSlice * i - Math.PI / 2) * radius)
+    .attr("y2", (_, i) => Math.sin(angleSlice * i - Math.PI / 2) * radius)
+    .attr("stroke", "#aaa");
+
+  // PART 5: RADIAL AXES VALUES
+  // Render the level labels
+    // Using raw data: 1, 2, ..., levels
+    // Join with text elements
+    // X position: 0
+    // Y position: -r(scaled value)
+    // DY position: -0.4em (slightly above the ring)
+    // Text: scaled value to 1 decimal place
   g.selectAll(".grid-label")
     .data(d3.range(1, levels + 1))
     .join("text")
     .attr("class", "label")
     .attr("x", 0)
-    .attr("y", d => -r((d / levels) * maxValue) - 4)
-    .text(d => (d / levels * maxValue).toFixed(2));
-
-  // AXES
-  const axis = g.selectAll(".axis")
-    .data(axes)
-    .join("g")
-    .attr("class", "axis")
-    .attr("transform", (_, i) => {
-      const a = i * angleSlice - Math.PI / 2;
-      return `rotate(${a * 180 / Math.PI})`;
-    });
-
-  axis.append("line")
-    .attr("x1", 0).attr("x2", radius)
-    .attr("y1", 0).attr("y2", 0);
-
-  axis.append("text")
-    .attr("class", "label")
-    .attr("x", d => r(maxValue) + 12)
-    .attr("y", 4)
-    .attr("transform", (_, i) => {
-      const a = i * angleSlice - Math.PI / 2;
-      return `rotate(${-(a * 180 / Math.PI)})`;
-    })
-    .text(d => d);
+    .attr("y", d => -r(d / levels))
+    .attr("dy", "-0.4em")
+    .text(d => (d / levels).toFixed(1));
 }
 
-// ---------- DRAW RADAR ----------
 function drawRadar(series) {
+  // Clear old polygons, dots, and legend
   g.selectAll(".area, .dot").remove();
-  const legend = svg.selectAll(".legend").remove();
+  svg.selectAll(".legend").remove();
+
+  // PART 6: RADAR POLYGONS GENERATOR
+  // Create radial line generator for polygons
+    // Closed linear curve
+    // Radius: scaled value
+    // Angle: index * angleSlice
+  const radialLine = d3.lineRadial()
+    .curve(d3.curveLinearClosed)
+    .radius(d => r(d.value))
+    .angle((_, i) => i * angleSlice);
 
   series.forEach((s, idx) => {
-    const pts = axes.map(axis => ({ axis, value: s[axis] }));
+    // Data points for each axis
+    // With format: { axis: axis_name, value: scaled_value }
+    const pts = axes.map(a => ({ axis: a, value: s[a] }));
+
+    // PART 7: RADAR POLYGONS
+    // Draw polygon area
+      // Fill color: from colors array
+      // Fill opacity: 0.3
+      // Stroke color: from colors array
+      // Stroke width: 1.5
+      // Path data: from radialLine generator
     g.append("path")
       .attr("class", "area")
       .attr("fill", colors[idx % colors.length])
+      .attr("fill-opacity", 0.3)
       .attr("stroke", colors[idx % colors.length])
+      .attr("stroke-width", 1.5)
       .attr("d", radialLine(pts));
 
+    // PART 8: DATA POINT DOTS
+    // Draw data point dots
+      // Class: dot
+      // Radius: 3
+      // Fill color: from colors array
+      // Position: translate based on axis angle and scaled value
     g.selectAll(`.dot-${idx}`)
       .data(pts)
       .join("circle")
       .attr("class", "dot")
-      .attr("r", 3)
+      .attr("r", 7)
       .attr("fill", colors[idx % colors.length])
       .attr("transform", d => {
         const a = axes.indexOf(d.axis) * angleSlice;
@@ -222,87 +266,122 @@ function drawRadar(series) {
       });
   });
 
-  // LEGEND
-  const legendGroup = svg.append("g")
+  // Create legend container
+  const legend = svg.append("g")
     .attr("class", "legend")
-    .attr("transform", `translate(${margin},${margin})`);
+    .attr("transform", `translate(${-margin * 4}, ${margin})`);
 
   series.forEach((s, i) => {
-    const row = legendGroup.append("g").attr("transform", `translate(0, ${i * 18})`);
+    // PART 9: LEGEND ITEMS CONTAINER
+    // Draw legend item row
+      // Position: translate vertically by index * 18
+    const row = legend.append("g").attr("transform", `translate(0, ${i * 40})`);
+
+    // PART 10: LEGEND COLOR SWATCH
+    // Draw color swatch rectangle
+      // Width: 12
+      // Height: 12
+      // Fill color: from colors array
     row.append("rect")
-      .attr("width", 12)
-      .attr("height", 12)
+      .attr("width", 24)
+      .attr("height", 24)
       .attr("fill", colors[i % colors.length]);
+
+    // PART 11: LEGEND TEXT
+    // Draw legend text
+      // X position: 18 (slightly right of swatch)
+      // Y position: 10 (vertically centered with swatch)
+      // Font size: 12px
+      // Text: hero name and role
     row.append("text")
-      .attr("x", 16)
-      .attr("y", 10)
-      .style("font-size", "12px")
-      .text(s.Name);
+      .attr("x", 38)
+      .attr("y", 20)
+      .style("font-size", "25px")
+      .style("font-weight", "500")
+      .text(`${s.Name} (${s.Role})`);
   });
 }
 
-// ---------- HERO SEARCH ----------
-function createHeroSelectors(heroes) {
-  const container = document.getElementById("hero-selectors");
+function createHeroSelectors(data, onSelect) {
+  const container = d3.select(".search-container");
+  const selectedHeroes = [];
+
+  // Create up to 5 dropdowns
   for (let i = 0; i < 5; i++) {
-    const select = document.createElement("select");
-    select.innerHTML = `<option value="">Select hero ${i + 1}</option>` +
-      heroes.map(h => `<option value="${h.Name}">${h.Name}</option>`).join("");
-    select.addEventListener("change", () => updateSelections(heroes));
-    container.appendChild(select);
+    // Create dropdown menu
+    container.append("select")
+      .attr("class", "hero-select")
+      .attr("id", `hero-${i}`)
+      // Add change event listener
+        // Create polygon for selected hero
+        // Update all dropdowns to prevent duplicates
+      .on("change", function () {
+        const name = this.value;
+        // data.find() to get full data for selected hero
+        selectedHeroes[i] = data.find(d => d.Name === name);
+        updateDropdowns();
+        onSelect(selectedHeroes.filter(Boolean));
+      });
   }
-}
 
-function updateSelections(heroes) {
-  const selects = Array.from(document.querySelectorAll("#hero-selectors select"));
-  const selectedNames = selects.map(s => s.value).filter(Boolean);
-  const uniqueNames = new Set(selectedNames);
+  // Build or rebuild all dropdowns
+  function updateDropdowns() {
+    // Scope only to hero dropdowns
+    container.selectAll("select.hero-select").each(function (_, i) {
+      // Current dropdown
+      const select = d3.select(this);
+      // Names of already chosen heroes, chosen has format : [name1, name2, ...]
+      const chosen = selectedHeroes.map(h => h?.Name);
+      
+      // Clear old options
+      select.selectAll("option").remove();
+      
+      // Add placeholder
+      select.append("option").text("-- Select Hero --").attr("value", "");
 
-  // Prevent duplicates
-  selects.forEach(sel => {
-    const current = sel.value;
-    Array.from(sel.options).forEach(opt => {
-      if (opt.value && opt.value !== current && uniqueNames.has(opt.value)) {
-        opt.disabled = true;
-      } else {
-        opt.disabled = false;
+      // Add heroes that are not already chosen elsewhere
+      data.forEach(hero => {
+        // If not already chosen or is the current selection, add to options
+        if (!chosen.includes(hero.Name) || selectedHeroes[i]?.Name === hero.Name) {
+          select.append("option")
+            .attr("value", hero.Name)
+            .text(hero.Name);
+        }
+      });
+
+      // Keep previous selection
+      if (selectedHeroes[i]) {
+        select.property("value", selectedHeroes[i].Name);
       }
     });
-  });
-
-  // Update chart
-  const selectedHeroes = heroes.filter(h => selectedNames.includes(h.Name));
-  if (selectedHeroes.length > 0) {
-    const normalized = normalizeHeroes(selectedHeroes);
-    drawRadar(normalized);
-  } else {
-    g.selectAll(".area, .dot").remove();
-    svg.selectAll(".legend").remove();
   }
+
+  // Initialize the dropdown menus once
+  updateDropdowns();
 }
 
-// ---------- NORMALIZE DATA ----------
-function normalizeHeroes(selected) {
-  const stats = axes;
-  const mins = {}, maxs = {};
-  stats.forEach(stat => {
-    mins[stat] = d3.min(selected, d => d[stat]);
-    maxs[stat] = d3.max(selected, d => d[stat]);
-  });
-
-  return selected.map(hero => {
-    const normHero = { Name: hero.Name };
-    stats.forEach(stat => {
-      const val = (hero[stat] - mins[stat]) / (maxs[stat] - mins[stat] || 1);
-      normHero[stat] = val;
-    });
-    return normHero;
-  });
+function normalizeData(data) {
+  const maxValues = {};
+  // For each axis, find the maximum value across all heroes
+  axes.forEach(axis => maxValues[axis] = d3.max(data, d => d[axis]));
+  // For each hero, create a normalized object
+    // with Name, Role, and normalized axis values
+  return data.map(hero => ({
+    Name: hero.Name,
+    Role: hero.Primary_Role,
+    // ... flattened potentially nested object
+    ...Object.fromEntries(axes.map(a => [a, hero[a] / maxValues[a]]))
+  }));
 }
 
 // ---------- MAIN ----------
-(async function init() { 
-  const heroes = await fetchJSON("../lib/heroes.json"); // adjust path
-  drawGrid();
-  createHeroSelectors(heroes);
+(async function init() {
+  // Fetch raw data
+  const data = await fetchJSON("../lib/heroes.json");
+  // Get normalized data
+  const normalizedData = normalizeData(data);
+  // Draw radar coordinate system
+  drawRadarCoordinate();
+  // Create hero selectors with callback to draw radar on selection
+  createHeroSelectors(normalizedData, drawRadar);
 })();
