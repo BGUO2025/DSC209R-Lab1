@@ -271,19 +271,6 @@ function drawRadar(series, rawData) {
         const a = axes.indexOf(d.axis) * angleSlice;
         return `translate(${Math.cos(a - Math.PI / 2) * r(d.value)},${Math.sin(a - Math.PI / 2) * r(d.value)})`;
       });
-
-    g.selectAll("path.area")
-      .on("mouseover", function(event, d) {
-        console.log("Hovered polygon:", this);
-        d3.select(this)
-          .attr("fill-opacity", 1.0) 
-          .attr("stroke-width", 30);
-      })
-      .on("mouseout", function(event, d) {
-        d3.select(this)
-          .attr("fill-opacity", 0.3)
-          .attr("stroke-width", 1.5);
-      });
   });
 }
 
@@ -396,8 +383,8 @@ function showHeroStats(selected_idx, hero) {
       <table style="border-collapse:collapse; font-size:20px;">
           <tr>
             <td style="padding:2px 8px; color:${colors[selected_idx % colors.length]};">Win Rate</td>
-            <td style="padding:2px 8px; text-align:right; font-weight:600; color:${colors[selected_idx % colors.length]};">${hero.win_ratio
- * 100}%</td>
+            <td style="padding:2px 8px; text-align:right; font-weight:600; color:${colors[selected_idx % colors.length]};">${Math.round(hero.win_ratio 
+ * 100)}%</td>
           </tr>
           <tr>
             <td style="padding:2px 8px; color:#444;">Release Year</td>
@@ -479,6 +466,95 @@ function createHeroSelectors(data, onSelect) {
   updateDropdowns();
 }
 
+function createHeroInputs(data, onSelect) {
+  // Store current selections
+  const selectedHeroes = [];
+
+  const container = d3.select(".search-container");
+
+  // Create up to 5 dynamic input fields
+  for (let i = 0; i < 5; i++) {
+    // Wrapper for input + suggestion list
+    const wrapper = container.append("div")
+      .attr("class", "hero-input-wrapper")
+      .style("position", "relative");
+
+    // Input field
+    const input = wrapper.append("input")
+      .attr("type", "text")
+      .attr("class", "hero-input")
+      .attr("id", `hero-input-${i}`)
+      .attr("placeholder", "Type Hero Name ...")
+      .style("padding", "6px")
+      .style("font-size", "14px");
+
+    // Suggestion list container
+    const suggestions = wrapper.append("div")
+      .attr("class", "suggestions")
+      .style("position", "absolute")
+      .style("top", "100%")
+      .style("left", 0)
+      .style("right", 0)
+      .style("border", "1px solid #ccc")
+      .style("background", "#fff")
+      .style("max-height", "150px")
+      .style("overflow-y", "auto")
+      .style("z-index", 10)
+      .style("display", "none");
+
+    // Event: typing in input
+    input.on("input", function(event) {
+      const query = this.value.toLowerCase();
+      const chosen = selectedHeroes.map(h => h?.Name);
+
+      // Filter heroes by input and not already selected elsewhere
+      const filtered = data
+      .filter(hero => hero.Name.toLowerCase().includes(query))
+      .sort((a, b) => {
+        const aName = a.Name.toLowerCase();
+        const bName = b.Name.toLowerCase();
+        const q = query.toLowerCase();
+
+        const aScore = aName.startsWith(q) ? 0 : 1;  // 0 = best match
+        const bScore = bName.startsWith(q) ? 0 : 1;
+
+        if (aScore !== bScore) return aScore - bScore;
+
+        // Tie-breaker: alphabetical
+        return aName.localeCompare(bName);
+      });
+
+      // Populate suggestions
+      suggestions.selectAll("div").remove();
+      if (filtered.length > 0) {
+        suggestions.style("display", "block");
+        filtered.forEach(hero => {
+          suggestions.append("div")
+            .text(hero.Name)
+            .style('font-size', '14px')
+            .style("cursor", "pointer")
+            .on("click", () => {
+              // Set selection
+              selectedHeroes[i] = hero;
+              input.property("value", hero.Name);
+              suggestions.style("display", "none");
+              onSelect(selectedHeroes.filter(Boolean));
+            });
+        });
+      } else {
+        suggestions.style("display", "none");
+      }
+    });
+
+    // Hide suggestions when clicking outside
+    d3.select("body").on("click." + i, function(event) {
+      if (!wrapper.node().contains(event.target)) {
+        suggestions.style("display", "none");
+      }
+    });
+  }
+}
+
 function createResetButton() {
   const container = d3.select(".search-container");
 
@@ -487,7 +563,8 @@ function createResetButton() {
     .attr("id", "reset-btn")
     .text("Reset All")
     .on("click", () => {
-      d3.selectAll(".hero-select").property("value", "");
+      d3.selectAll(".hero-select")?.property("value", "");
+      d3.selectAll(".hero-input")?.property("value", "");
       selectedHeroes.length = 0;
       d3.selectAll(".area, .dot").remove();
       d3.selectAll(".legend-item").remove();
@@ -518,13 +595,23 @@ function normalizeData(data) {
   const normalizedData = normalizeData(rawData);
   // Draw radar coordinate system
   drawRadarCoordinate();
-  // Create hero selectors with callback to draw radar on selection
-  createHeroSelectors(
-    normalizedData, 
-    (selected) => {
-      drawRadar(selected, rawData);
-      drawLegend(selected, rawData);
-    });
+  // // Create hero selectors with callback to draw radar on selection
+  // createHeroSelectors(
+  //   normalizedData, 
+  //   (selected) => {
+  //     drawRadar(selected, rawData);
+  //     drawLegend(selected, rawData);
+  //   });
+
+  // Create hero input with callback to draw radar on selection
+  createHeroInputs(normalizedData, (selectedHeroes) => {
+    // This callback runs whenever selections change
+    // Draw radar polygons for the selected heroes
+    drawRadar(selectedHeroes, rawData);
+
+    // Update legend
+    drawLegend(selectedHeroes, rawData);
+  });
 
   // Create reset button
   createResetButton();

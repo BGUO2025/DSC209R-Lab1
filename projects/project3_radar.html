@@ -13,6 +13,25 @@
       margin: 20px;
     }
 
+    body.dark-mode svg text {
+      fill: white;
+    }
+
+    body.dark-mode .suggestions {
+      color: black;
+    }
+
+    body.dark-mode #stats-panel {
+      background-color: #f9f9f9;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 3px solid #888;
+    }
+
+    body.dark-mode #stats-panel td {
+      color: black;
+    }
+
     .axis line { stroke: #aaa; stroke-width: 1px; }
     .grid { fill: none; stroke: #ddd; }
     .label { font-size: 12px; text-anchor: middle; }
@@ -26,6 +45,10 @@
       gap: 10px;
       margin-bottom: 25px;
       width: 1400px;
+    }
+
+    .hero-input-wrapper .suggestions div:hover {
+      background-color: #eee;
     }
 
     .chart-container {
@@ -46,7 +69,6 @@
 
     #reset-btn {
       font-size: 18px;
-      padding: 10px 20px;
       border-radius: 8px;
       background: #d33;
       color: white;
