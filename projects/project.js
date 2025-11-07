@@ -595,23 +595,23 @@ function normalizeData(data) {
   const normalizedData = normalizeData(rawData);
   // Draw radar coordinate system
   drawRadarCoordinate();
-  // // Create hero selectors with callback to draw radar on selection
-  // createHeroSelectors(
-  //   normalizedData, 
-  //   (selected) => {
-  //     drawRadar(selected, rawData);
-  //     drawLegend(selected, rawData);
-  //   });
+  // Create hero selectors with callback to draw radar on selection
+  createHeroSelectors(
+    normalizedData, 
+    (selected) => {
+      drawRadar(selected, rawData);
+      drawLegend(selected, rawData);
+    });
 
-  // Create hero input with callback to draw radar on selection
-  createHeroInputs(normalizedData, (selectedHeroes) => {
-    // This callback runs whenever selections change
-    // Draw radar polygons for the selected heroes
-    drawRadar(selectedHeroes, rawData);
+  // // Create hero input with callback to draw radar on selection
+  // createHeroInputs(normalizedData, (selectedHeroes) => {
+  //   // This callback runs whenever selections change
+  //   // Draw radar polygons for the selected heroes
+  //   drawRadar(selectedHeroes, rawData);
 
-    // Update legend
-    drawLegend(selectedHeroes, rawData);
-  });
+  //   // Update legend
+  //   drawLegend(selectedHeroes, rawData);
+  // });
 
   // Create reset button
   createResetButton();
