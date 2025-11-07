@@ -134,12 +134,13 @@ const radius = Math.min(width, height) / 2 - margin;
 const colors = d3.schemeTableau10;
 const angleSlice = (2 * Math.PI) / axes.length;
 const r = d3.scaleLinear().domain([0, 1]).range([0, radius]);
+const selectedHeroes = [];
 
 // ---------- CREATE SVG & BASE GROUP ----------
 // SVG Container
 const svg = d3.select("svg#radar")
   .attr("width", width)
-  .attr("height", height/2)
+  .attr("height", height)
   .attr("viewBox", [0, 0, width, height])
   .attr("preserveAspectRatio", "xMidYMid meet");
 // Plot Container
@@ -213,10 +214,12 @@ function drawRadarCoordinate() {
     .text(d => (d / levels).toFixed(1));
 }
 
-function drawRadar(series) {
-  // Clear old polygons, dots, and legend
+function drawRadar(series, rawData) {
+  // series refers to normalized selected data
+  // rawData refers to raw full data
+
+  // Clear old polygons, dots
   g.selectAll(".area, .dot").remove();
-  svg.selectAll(".legend").remove();
 
   // PART 6: RADAR POLYGONS GENERATOR
   // Create radial line generator for polygons
@@ -228,7 +231,7 @@ function drawRadar(series) {
     .radius(d => r(d.value))
     .angle((_, i) => i * angleSlice);
 
-  series.forEach((s, idx) => {
+  series.forEach((s, i) => {
     // Data points for each axis
     // With format: { axis: axis_name, value: scaled_value }
     const pts = axes.map(a => ({ axis: a, value: s[a] }));
@@ -240,13 +243,17 @@ function drawRadar(series) {
       // Stroke color: from colors array
       // Stroke width: 1.5
       // Path data: from radialLine generator
+      // Mouseover: increase fill opacity to 1 over 150ms
+      // Mouseout: decrease fill opacity to 0.3 over 150ms
     g.append("path")
-      .attr("class", "area")
-      .attr("fill", colors[idx % colors.length])
+      .attr("class", `area area-${i}`)
+      .attr("fill", colors[i % colors.length])
       .attr("fill-opacity", 0.3)
-      .attr("stroke", colors[idx % colors.length])
+      .attr("stroke", colors[i % colors.length])
       .attr("stroke-width", 1.5)
-      .attr("d", radialLine(pts));
+      .attr("d", radialLine(pts))
+      .on("mouseover", () => highlightHero(i, s, rawData))
+      .on("mouseout", clearHighlight);
 
     // PART 8: DATA POINT DOTS
     // Draw data point dots
@@ -254,57 +261,169 @@ function drawRadar(series) {
       // Radius: 3
       // Fill color: from colors array
       // Position: translate based on axis angle and scaled value
-    g.selectAll(`.dot-${idx}`)
+    g.selectAll(`.dot-${i}`)
       .data(pts)
       .join("circle")
       .attr("class", "dot")
       .attr("r", 7)
-      .attr("fill", colors[idx % colors.length])
+      .attr("fill", colors[i % colors.length])
       .attr("transform", d => {
         const a = axes.indexOf(d.axis) * angleSlice;
         return `translate(${Math.cos(a - Math.PI / 2) * r(d.value)},${Math.sin(a - Math.PI / 2) * r(d.value)})`;
       });
-  });
 
-  // Create legend container
-  const legend = svg.append("g")
-    .attr("class", "legend")
-    .attr("transform", `translate(${-margin * 4}, ${margin})`);
+    g.selectAll("path.area")
+      .on("mouseover", function(event, d) {
+        console.log("Hovered polygon:", this);
+        d3.select(this)
+          .attr("fill-opacity", 1.0) 
+          .attr("stroke-width", 30);
+      })
+      .on("mouseout", function(event, d) {
+        d3.select(this)
+          .attr("fill-opacity", 0.3)
+          .attr("stroke-width", 1.5);
+      });
+  });
+}
+
+function drawLegend(series, rawData) {
+  // Clear old legend
+  d3.selectAll(".legend-item").remove();
+  // Legend Container
+  const legend = d3.select("svg#legend-container")
+    .attr("transform", "translate(0, 70)")
+    .attr("width", 300)
+    .attr("height", 800);
 
   series.forEach((s, i) => {
     // PART 9: LEGEND ITEMS CONTAINER
     // Draw legend item row
       // Position: translate vertically by index * 18
-    const row = legend.append("g").attr("transform", `translate(0, ${i * 40})`);
+    const row = legend.append("g")
+      .attr("class", `legend-item legend-item-${i}`)
+      .attr("transform", `translate(0, ${i * 70})`)
+      .on("mouseover", () => {
+        highlightHero(i, s, rawData)
+        g.selectAll("path.area")
+          .attr("fill-opacity", 0.05)
+          .attr("stroke-width", 1.5);
+        g.select(`path.area.area-${i}`)
+          .attr("fill-opacity", 1);
+      })
+      .on("mouseout", clearHighlight);
 
     // PART 10: LEGEND COLOR SWATCH
     // Draw color swatch rectangle
-      // Width: 12
-      // Height: 12
+      // Width: XYZ
+      // Height: XYZ
       // Fill color: from colors array
     row.append("rect")
-      .attr("width", 24)
-      .attr("height", 24)
+      .attr("width", 35)
+      .attr("height", 35)
       .attr("fill", colors[i % colors.length]);
 
     // PART 11: LEGEND TEXT
     // Draw legend text
-      // X position: 18 (slightly right of swatch)
-      // Y position: 10 (vertically centered with swatch)
+      // X position: XYZ
+      // Y position: XYZ
       // Font size: 12px
       // Text: hero name and role
     row.append("text")
-      .attr("x", 38)
+      .attr("x", 50)
       .attr("y", 20)
-      .style("font-size", "25px")
+      .style("font-size", "20px")
       .style("font-weight", "500")
       .text(`${s.Name} (${s.Role})`);
   });
 }
 
+function highlightHero(selected_idx, hero, rawHeroData) {
+  // hero refers to normalized selected instance
+  // rawHeroData refers to raw full data
+
+  // Dim all
+  d3.selectAll("path.area")
+    .attr("fill-opacity", 0.05)
+    .attr("stroke-width", 1.5);
+  // Highlight selected polygon
+  d3.select(`path.area.area-${selected_idx}`)
+    .attr("fill-opacity", 1);
+
+  // Dim all legend items
+  d3.select("#legend-container")
+    .selectAll(".legend-item text")
+    .style("opacity", 0.3);
+  // Bolden the corresponding legend
+  d3.select("#legend-container")
+    .select(`.legend-item-${selected_idx} text`)
+    .style("opacity", 1)
+    .style("font-weight", "700");
+
+  // Show hero metrics
+  showHeroStats(selected_idx, rawHeroData.find(h => h.Name === hero.Name));
+}
+
+function showHeroStats(selected_idx, hero) {
+  // hero refers to raw selected instance
+
+  const panel = d3.select("#stats-panel");
+  // Show hero name, role, release year, win ratio and all axis values in a table
+  // Format:
+  // Name (Role)
+  // ----------------
+  // Axis1      Value1
+  // Axis2      Value2
+  // ...
+  panel.html(`
+    <div style="padding:10px; border-left:3px solid #888;">
+      <h1 style="margin-bottom:6px; color: ${colors[selected_idx % colors.length]};">
+        ${hero.Name} 
+        <span style="font-weight:400; color:#${colors[selected_idx % colors.length]};">(${hero.Primary_Role})</span>
+      </h1>
+
+      <table style="border-collapse:collapse; font-size:20px;">
+        ${axes.map(a => `
+          <tr>
+            <td style="padding:2px 8px; color:#444;">${a}</td>
+            <td style="padding:2px 8px; text-align:right; font-weight:600;">${hero[a]}</td>
+          </tr>`).join("")}
+      </table>
+
+      <!-- Small gap below table -->
+      <div style="height: 10px;"></div>
+
+      <table style="border-collapse:collapse; font-size:20px;">
+          <tr>
+            <td style="padding:2px 8px; color:${colors[selected_idx % colors.length]};">Win Rate</td>
+            <td style="padding:2px 8px; text-align:right; font-weight:600; color:${colors[selected_idx % colors.length]};">${hero.win_ratio
+ * 100}%</td>
+          </tr>
+          <tr>
+            <td style="padding:2px 8px; color:#444;">Release Year</td>
+            <td style="padding:2px 8px; text-align:right; font-weight:600;">${hero.Release_Year}</td>
+          </tr>
+      </table>
+    </div>
+  `);
+}
+
+function clearHighlight() {
+
+  g.selectAll("path.area").attr("fill-opacity", 0.3);
+  d3.select("#legend-container")
+    .selectAll(".legend-item text").
+    style("opacity", 1).
+    style("font-weight", "500");
+
+  // Clear metrics
+  d3.select("#stats-panel").html("");
+}
+
 function createHeroSelectors(data, onSelect) {
+  // Data refers to normalized data
+
   const container = d3.select(".search-container");
-  const selectedHeroes = [];
 
   // Create up to 5 dropdowns
   for (let i = 0; i < 5; i++) {
@@ -360,6 +479,22 @@ function createHeroSelectors(data, onSelect) {
   updateDropdowns();
 }
 
+function createResetButton() {
+  const container = d3.select(".search-container");
+
+  // Append a reset button
+  container.append("button")
+    .attr("id", "reset-btn")
+    .text("Reset All")
+    .on("click", () => {
+      d3.selectAll(".hero-select").property("value", "");
+      selectedHeroes.length = 0;
+      d3.selectAll(".area, .dot").remove();
+      d3.selectAll(".legend-item").remove();
+      d3.select("#stats-panel").html("");
+    });
+}
+
 function normalizeData(data) {
   const maxValues = {};
   // For each axis, find the maximum value across all heroes
@@ -369,6 +504,7 @@ function normalizeData(data) {
   return data.map(hero => ({
     Name: hero.Name,
     Role: hero.Primary_Role,
+    Release_Year: hero.release_year,
     // ... flattened potentially nested object
     ...Object.fromEntries(axes.map(a => [a, hero[a] / maxValues[a]]))
   }));
@@ -377,11 +513,22 @@ function normalizeData(data) {
 // ---------- MAIN ----------
 (async function init() {
   // Fetch raw data
-  const data = await fetchJSON("../lib/heroes.json");
+  const rawData = await fetchJSON("../lib/heroes.json");
   // Get normalized data
-  const normalizedData = normalizeData(data);
+  const normalizedData = normalizeData(rawData);
   // Draw radar coordinate system
   drawRadarCoordinate();
   // Create hero selectors with callback to draw radar on selection
-  createHeroSelectors(normalizedData, drawRadar);
+  createHeroSelectors(
+    normalizedData, 
+    (selected) => {
+      drawRadar(selected, rawData);
+      drawLegend(selected, rawData);
+    });
+
+  // Create reset button
+  createResetButton();
 })();
+
+// Issue 5: Add ability to select multiple heroes to compare on the Radar Chart.
+// ----------------------------------------------------------------------------------------------------

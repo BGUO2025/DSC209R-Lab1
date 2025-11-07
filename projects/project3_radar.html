@@ -24,20 +24,55 @@
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      width: 1400px;
+    }
+
+    .chart-container {
+      display:flex;
+      align-items:flex-start;
+      gap:0px;
+      width: 1800px;
+      height:800px;
     }
 
     select {
-      padding: 6px;
-      font-size: 14px;
-      border-radius: 6px;
+      padding: 10px 16px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #aaa;
+      min-width: 200px;
     }
+
+    #reset-btn {
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      background: #d33;
+      color: white;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    #reset-btn:hover {
+      background: #b22;
+    }
+
   </style>
 </head>
 
 <body>
+  <!-- Radar Chart Title -->
   <h2>MLBB Hero Radar Chart</h2>
+  <!-- Dropdown Menus for Hero Selection & Reset Button-->
   <div class="search-container"></div>
-  <svg id="radar" width="640" height="480"></svg>
+  <!-- Radar Chart -->
+  <div class="chart-container">
+    <svg id="legend-container"></svg>
+    <svg id="radar"></svg>
+    <div id="stats-panel" style="font-family:monospace;"></div>
+  </div>
 </body>
 </html>
