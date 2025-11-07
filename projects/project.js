@@ -129,7 +129,7 @@ searchInput?.addEventListener('input', (event) => {
 // ---------- CONFIGURATION ----------
 const axes = ["Hp", "Hp_Regen", "Mana", "Mana_Regen", "Phy_Damage", "Phy_Defence", "Mag_Defence", "Mov_Speed"];
 const levels = 5;
-const width = 1000, height = 800, margin = 80;
+const width = 1000, height = 600, margin = 80;
 const radius = Math.min(width, height) / 2 - margin;
 const colors = d3.schemeTableau10;
 const angleSlice = (2 * Math.PI) / axes.length;
@@ -281,7 +281,7 @@ function drawLegend(series, rawData) {
   const legend = d3.select("svg#legend-container")
     .attr("transform", "translate(0, 70)")
     .attr("width", 300)
-    .attr("height", 800);
+    .attr("height", 600);
 
   series.forEach((s, i) => {
     // PART 9: LEGEND ITEMS CONTAINER
