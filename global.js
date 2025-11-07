@@ -2,9 +2,10 @@
 // Define the pages for the navigation bar
 let pages = [
     { url: 'index.html',                  title: 'HOME' },
-    { url: 'contact/index.html',          title: 'CONTACT' },
     { url: 'CV/index.html',               title: 'CURRICULUM VITAE' },
     { url: 'projects/index.html',         title: 'PROJECTS' },
+    { url: 'contact/index.html',          title: 'CONTACT' },
+    { url: 'meta/index.html',             title: 'META'},
     { url: 'https://github.com/BGUO2025', title: 'PROFILE', openInNewTab: true },
 ];
 

@@ -1,0 +1,39 @@
+/* Container for stats */
+.stats {
+  max-width: 600px;       /* Limit width for readability */
+  margin: 2rem auto;      /* Center on page */
+  padding: 1rem 2rem;
+  background-color: #f9f9f9; /* light gray background */
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style each term (dt) */
+.stats dt {
+  font-weight: bold;
+  margin-top: 1rem;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Style each description (dd) */
+.stats dd {
+  margin-left: 0;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  color: #555;
+  font-size: 1rem;
+}
+
+/* Optional: abbreviation styling */
+.stats abbr {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+/* Add subtle separation line */
+.stats dt + dd {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.3rem;
+}
