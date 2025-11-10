@@ -193,6 +193,17 @@ function renderScatterPlot(data, commits) {
     .on('mouseleave', () => {
       updateTooltipVisibility(false);
     });
+
+  
+  svg.call(
+    d3.brush()
+      .on('start brush end', (event) =>
+        brushed(event, commits, xScale, yScale)
+      )
+  );
+
+  // Keep tooltips above overlay
+  svg.selectAll('.dots, .overlay ~ *').raise();
 }
 
 // ---------------------------
@@ -228,6 +239,76 @@ function updateTooltipPosition(event) {
   const tooltip = document.getElementById('commit-tooltip');
   tooltip.style.left = `${event.clientX + 10}px`; // small offset
   tooltip.style.top = `${event.clientY + 10}px`;
+}
+
+function isCommitSelected(selection, commit, xScale, yScale) {
+  if (!selection) return false;
+
+  const [[x0, y0], [x1, y1]] = selection;
+  const x = xScale(commit.datetime);
+  const y = yScale(commit.hourFrac);
+
+  // Return true if dot is inside the selection rectangle
+  return x0 <= x && x <= x1 && y0 <= y && y <= y1;
+}
+
+function renderSelectionCount(selection, commits, xScale, yScale) {
+  const selectedCommits = selection
+    ? commits.filter((d) => isCommitSelected(selection, d, xScale, yScale))
+    : [];
+
+  const countElement = document.querySelector('#selection-count');
+  countElement.textContent = `${
+    selectedCommits.length || 'No'
+  } commits selected`;
+
+  return selectedCommits;
+}
+
+function renderLanguageBreakdown(selection, commits, xScale, yScale) {
+  const selectedCommits = selection
+    ? commits.filter((d) => isCommitSelected(selection, d, xScale, yScale))
+    : [];
+
+  const container = document.getElementById('language-breakdown');
+
+  if (selectedCommits.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const lines = selectedCommits.flatMap((d) => d.lines);
+
+  // Count lines per language
+  const breakdown = d3.rollup(
+    lines,
+    (v) => v.length,
+    (d) => d.type
+  );
+
+  // Update DOM
+  container.innerHTML = '';
+  for (const [language, count] of breakdown) {
+    const proportion = count / lines.length;
+    const formatted = d3.format('.1~%')(proportion);
+    container.innerHTML += `
+      <dt>${language}</dt>
+      <dd>${count} lines (${formatted})</dd>
+    `;
+  }
+}
+
+function brushed(event, commits, xScale, yScale) {
+  const selection = event.selection;
+
+  // Highlight selected dots
+  d3.selectAll('circle').classed('selected', (d) =>
+    isCommitSelected(selection, d, xScale, yScale),
+  );
+
+  // Update summary info
+  renderSelectionCount(selection, commits, xScale, yScale);
+  renderLanguageBreakdown(selection, commits, xScale, yScale);
 }
 
 // ---------------------------
