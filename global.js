@@ -179,13 +179,15 @@ export function renderProjects(projects, containerElement, path_dir) {
         const description = project.description || 'No description available.';
         const year = project.year || 'Unknown Year';
         const link = project.link || null;
+        const external = project.external || false;
 
         // Create <article> element
         const article = document.createElement('article');
 
         // If there's a link, prepend the path and wrap the title
         const hasLink = link !== null;
-        const fullLink = hasLink ? path_dir + link : null;
+        const isExternal = external === true;
+        const fullLink = hasLink ? (isExternal ? link : path_dir + link) : null;
 
         const titleHTML = hasLink
             ? `<a href="${fullLink}" target="_blank"><h2 class="highlight-clicked">${title}</h2></a>`
